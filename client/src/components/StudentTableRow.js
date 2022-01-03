@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import {axiosInstance} from '../config';
 import Button from 'react-bootstrap/Button';
+import axios from "axios";
 
 export default class StudentTableRow extends Component {
 
@@ -11,7 +11,7 @@ export default class StudentTableRow extends Component {
     }
 
     deleteStudent() {
-        axiosInstance.delete('http://localhost:8080/students/delete-student/' + this.props.obj._id)
+        axios.delete('/api/v1/students/delete-student/' + this.props.obj._id)
             .then((res) => {
                 console.log('Student successfully deleted!')
             }).catch((error) => {

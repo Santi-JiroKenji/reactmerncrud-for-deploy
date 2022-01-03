@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
-import {axiosInstance} from '../config';
+import axios from "axios";
 
 export default class CreateStudent extends Component {
 
@@ -43,7 +43,7 @@ export default class CreateStudent extends Component {
       rollno: this.state.rollno
     };
 
-    axiosInstance.post('http://localhost:8080/students/create-student', studentObject)
+    axios.post('/api/v1/students/create-student/', studentObject)
       .then(res => console.log(res.data));
 
     this.setState({

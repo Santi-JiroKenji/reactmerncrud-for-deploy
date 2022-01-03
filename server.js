@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
-const dbConfig = require("./database/db");
+// const dbConfig = require("./database/db");
 const createError = require("http-errors");
 const app = express();
 const dotenv = require("dotenv");
@@ -18,11 +18,8 @@ const studentRoute = require("./routes/student.route");
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
 mongoose
-  .connect(process.env.MONGO_URL, {
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
-    // useUnifiedTopology: true,
-    // useCreateIndex: true,
-    // useFindAndModify: true,
   })
   .then(
     () => {
@@ -40,17 +37,26 @@ app.use(
   })
 );
 app.use(cors());
-app.use("/students", studentRoute);
+app.use("/api/v1/students", studentRoute);
 
-app.use(express.static(path.join(__dirname, "/client/build")));
+if(process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/client/build")))
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '/client/build', 'index.html'));
-});
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "/client/build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("Api running");
+  });
+}
 
-app.listen(process.env.PORT || 8080, () => {
-  console.log("Server is running.");
-});
+// app.listen(process.env.PORT || 5000, () => {
+//   console.log("Server is running.");
+// });
+
+const PORT = process.env.PORT;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 app.use((req, res, next) => {
   next(createError(404));

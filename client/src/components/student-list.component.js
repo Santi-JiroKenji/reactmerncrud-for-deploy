@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import {axiosInstance} from '../config';
 import Table from 'react-bootstrap/Table';
 import StudentTableRow from './StudentTableRow';
-
+import axios from "axios";
 
 export default class StudentList extends Component {
 
@@ -14,7 +13,7 @@ export default class StudentList extends Component {
   }
 
   componentDidMount() {
-    axiosInstance.get('http://localhost:8080/students/read')
+    axios.get('/api/v1/students/')
       .then(res => {
         this.setState({
           students: res.data
